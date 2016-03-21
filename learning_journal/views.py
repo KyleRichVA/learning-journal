@@ -30,7 +30,7 @@ def detail_view(request):
     entry = DBSession.query(Entry).filter(
         Entry.id == id).first()
     title = "Learning Journal Entry {}".format(id)
-    return {'entry': entry, 'entry_text': entry.markdown(), 'title': title}
+    return {'entry': entry, 'entry_text': entry.markdown, 'title': title}
 
 
 @view_config(route_name='add_entry',

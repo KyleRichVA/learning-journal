@@ -30,6 +30,7 @@ class Entry(Base):
     text = Column(Text(convert_unicode=True))
     created = Column(DateTime, default=datetime.datetime.utcnow)
 
+    @property
     def markdown(self):
         return markdown.markdown(self.text)
 
