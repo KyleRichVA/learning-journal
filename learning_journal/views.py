@@ -21,7 +21,7 @@ class EntryForm(Form):
 @view_config(route_name='list', renderer='templates/list_template.jinja2')
 def list_view(request):
     entries = DBSession.query(Entry).order_by(desc(Entry.created))
-    return {'entries': entries, 'title': 'Learning Journal'}
+    return {'entries': entries, 'title': "Kyle's Learning Journal"}
 
 
 @view_config(route_name='detail', renderer='templates/detail_template.jinja2')

@@ -22,6 +22,7 @@ def test_entry_view(app, session):
     assert test_entry.title in response.text
     assert test_entry.text in response.text
 
+
 def test_add_entry_view(app, session):
     url = '/entry/add'
     response = app.get(url)
