@@ -7,8 +7,14 @@
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     </head>
     <body>
-    {% block titlebar %}
-    {% endblock titlebar %}
+    <div class="titlebar container">
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+            {% block titlebar %}
+            {% endblock titlebar %}
+            </div>
+        </nav>
+    </div>
     {% block content %}
     {% endblock content %}
     </body>
