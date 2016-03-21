@@ -4,13 +4,14 @@
     <a class="navbar-brand" href="{{ request.route_url("add_entry") }}">Kyle's Journal</a>
 </div>
 <ul class="nav navbar-nav">
-    <li>Entry Name</li>
     <li><a href="{{ request.route_url("add_entry") }}">Add Entry</a></li>
 </ul>
 {% endblock titlebar %}
 {% block content %}
-    <h1>{{ entry.title }}</h2>
-    <h3>{{ entry.created }}</h3>
-    {{ entry_text|safe }}
-<a href="{{ request.route_url("edit_entry", id = entry.id) }}">Edit Entry</a>
+    <div class="entry container">
+        <h1>{{ entry.title }}</h1>
+        <h3>{{ entry.created }}</h3>
+        <div class="well">{{ entry_text|safe }}</div>
+        <a href="{{ request.route_url("edit_entry", id = entry.id) }}" class="btn btn-default" role="button">Edit Entry</a>
+    </div>
 {% endblock content %}
