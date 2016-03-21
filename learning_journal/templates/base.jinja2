@@ -10,8 +10,12 @@
     <div class="titlebar container">
         <nav class="navbar navbar-inverse">
             <div class="container-fluid">
-            {% block titlebar %}
-            {% endblock titlebar %}
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="{{ request.route_url("list") }}">Kyle's Journal</a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li><a href="{{ request.route_url("add_entry") }}">Add Entry</a></li>
+                </ul>
             </div>
         </nav>
     </div>

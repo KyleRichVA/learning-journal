@@ -1,12 +1,4 @@
 {% extends "base.jinja2" %}
-{% block titlebar %}
-<div class="navbar-header">
-    <a class="navbar-brand" href="{{ request.route_url("add_entry") }}">Kyle's Journal</a>
-</div>
-<ul class="nav navbar-nav">
-    <li><a href="{{ request.route_url("add_entry") }}">Add Entry</a></li>
-</ul>
-{% endblock titlebar %}
 {% block content %}
     <div class="entry container">
         <h1>{{ entry.title }}</h1>
