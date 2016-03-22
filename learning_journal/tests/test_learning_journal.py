@@ -69,3 +69,10 @@ def test_edit_entry_view(app, session):
     edited_page = edited_response.text
     assert "New Title" in edited_page
     assert "new text" in edited_page
+
+
+def test_logout_view(app, session):
+    # Login and log out and check if you can visit a protected page.
+    login("owner", "sounders", app)
+    app.get('/logout')
+    assert u'Log In' in app.get('/').text
