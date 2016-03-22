@@ -62,6 +62,13 @@ def edit_entry_view(request):
     return {'title': 'Add Entry', 'form': edited_form}
 
 
+@view_config(route_name='login', renderer='templates/login_template.jinja2',
+             permission='read')
+def login_view(request):
+    pass
+
+
+
 conn_err_msg = """\
 Pyramid is having a problem using your SQL database.  The problem
 might be caused by one of the following things:

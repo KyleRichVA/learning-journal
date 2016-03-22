@@ -30,5 +30,7 @@ def main(global_config, **settings):
     config.add_route('detail', '/entry/{id:\d+}')
     config.add_route('add_entry', '/entry/add')
     config.add_route('edit_entry', '/entry/{id}/edit')
+    config.add_route('login', '/login')
+    config.add_route('logout', '/logout')
     config.scan()
     return config.make_wsgi_app()
