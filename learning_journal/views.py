@@ -94,7 +94,7 @@ def login_view(request):
 
 @view_config(route_name='logout')
 def logout_view(request):
-    """Logout View"""
+    """Logout View."""
     headers = forget(request)
     return HTTPFound(request.route_url('list'), headers=headers)
 
