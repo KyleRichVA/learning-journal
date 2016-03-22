@@ -1,6 +1,7 @@
 from pyramid.config import Configurator
 from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
+from pyramid.session import SignedCookieSessionFactory
 from passlib.hash import sha256_crypt
 
 from sqlalchemy import engine_from_config
@@ -23,10 +24,12 @@ def main(global_config, **settings):
     authn_policy = AuthTktAuthenticationPolicy('superseekret',
                                                hashalg='sha512')
     authz_policy = ACLAuthorizationPolicy()
+    cookie_factory = SignedCookieSessionFactory('donttellanyone')
     config = Configurator(settings=settings,
                           authentication_policy=authn_policy,
                           authorization_policy=authz_policy,
-                          root_factory=RootFactory)
+                          root_factory=RootFactory,
+                          session_factory=cookie_factory)
     config.include('pyramid_jinja2')
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_route('list', '/')

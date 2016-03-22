@@ -1,6 +1,7 @@
 {% extends "base.jinja2" %}
 {% block content %}
 <form method="POST">
+    <input type="hidden" name="csrf_token" value="{{ request.session.get_csrf_token() }}">
     <div>{{ form.title.label }}: {{ form.title() }}</div>
     <div>{{ form.text.label }}: {{ form.text() }}</div>
     <button type="submit">Edit Entry</button>
