@@ -59,6 +59,10 @@ def add_entry_view(request):
     """View for adding entry page."""
     entry_form = EntryForm(request.POST)
     if request.method == 'POST' and entry_form.validate():
+        if DBSession.query(Entry).filter(
+                Entry.title == entry_form.title.data):
+            return {'title': 'Add Entry', 'form': entry_form,
+                    'error': 'Title Already Used'}
         new_entry = Entry(title=entry_form.title.data,
                           text=entry_form.text.data)
         DBSession.add(new_entry)
@@ -75,6 +79,11 @@ def edit_entry_view(request):
     current_entry = DBSession.query(Entry).filter(Entry.id == id).first()
     edited_form = EntryForm(request.POST, current_entry)
     if request.method == 'POST' and edited_form.validate():
+        # If we try to edit the title to something already in DB
+        if DBSession.query(Entry).filter(
+                Entry.title == edited_form.title.data):
+            return {'title': 'Add Entry', 'form': edited_form,
+                    'error': 'Title Already Used'}
         current_entry.title = edited_form.title.data
         current_entry.text = edited_form.text.data
         return HTTPFound(request.route_url("detail", id=current_entry.id))
