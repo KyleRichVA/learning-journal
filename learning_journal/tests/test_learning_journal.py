@@ -2,6 +2,12 @@ from learning_journal.models import Entry
 from learning_journal.views import good_login
 
 
+def login(username, password, app):
+    """Helper function for logins for testing."""
+    login = {'username': username, 'password': password}
+    return app.post('/login', params=login)
+
+
 def test_entry_creation(session):
     test_entry = Entry(title=u"Test Entry", text=u"Here is my test entry")
     session.add(test_entry)
@@ -39,6 +45,7 @@ def test_entry_view(app, session):
 
 
 def test_add_entry_view(app, session):
+    login("owner", "sounders", app)
     url = '/entry/add'
     response = app.get(url)
     assert response.status_code == 200
@@ -48,6 +55,7 @@ def test_add_entry_view(app, session):
 
 
 def test_edit_entry_view(app, session):
+    login("owner", "sounders", app)
     one_entry = session.query(Entry).filter(Entry.title==u"Test Entry").first()
     url = '/entry/{id}/edit'.format(id=one_entry.id)
     response = app.get(url)

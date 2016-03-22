@@ -23,8 +23,8 @@ class EntryForm(Form):
 
 def good_login(request):
     """Return true if the request is a valid login."""
-    username = request.params.getone('username')
-    password = request.params.getone('password')
+    username = request.params['username']
+    password = request.params['password']
     settings = request.registry.settings
     if not (username and password):  # UN or PW is missing
         return False
@@ -90,6 +90,13 @@ def login_view(request):
             headers = remember(request, request.params['username'])
             return HTTPFound(request.route_url('list'), headers=headers)
     return {}
+
+
+@view_config(route_name='logout')
+def logout_view(request):
+    """Logout View"""
+    headers = forget(request)
+    return HTTPFound(request.route_url('list'), headers=headers)
 
 
 conn_err_msg = """\
