@@ -65,7 +65,7 @@ def edit_entry_view(request):
 @view_config(route_name='login', renderer='templates/login_template.jinja2',
              permission='read')
 def login_view(request):
-    pass
+    return {}
 
 
 
