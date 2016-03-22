@@ -23,8 +23,8 @@ class EntryForm(Form):
 
 def good_login(request):
     """Return true if the request is a valid login."""
-    username = request.params['username']
-    password = request.params['password']
+    username = request.params.getone('username')
+    password = request.params.getone('password')
     settings = request.registry.settings
     if not (username and password):  # UN or PW is missing
         return False
@@ -89,7 +89,7 @@ def login_view(request):
         if good_login(request):
             headers = remember(request, request.params['username'])
             return HTTPFound(request.route_url('list'), headers=headers)
-
+    return {}
 
 
 conn_err_msg = """\
