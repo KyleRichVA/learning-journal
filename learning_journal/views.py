@@ -4,7 +4,7 @@ from pyramid.httpexceptions import HTTPFound
 
 from sqlalchemy.exc import DBAPIError, SQLAlchemyError
 from sqlalchemy import desc
-
+from passlib.hash import sha256_crypt
 from .models import (
     DBSession,
     Entry,
@@ -18,9 +18,21 @@ class EntryForm(Form):
     text = TextAreaField(u'Entry', [validators.required()])
 
 
+def good_login(request):
+    """Return true if the request is a valid login."""
+    username = request.params['username']
+    password = request.params['password']
+    settings = request.registry.settings
+    if not (username and password):  # UN or PW is mising
+        return False
+    if username == settings.get('auth.username'):
+        return sha256_crypt.verify(password, settings.get('auth.password'))
+
+
 @view_config(route_name='list', renderer='templates/list_template.jinja2',
              permission='read')
 def list_view(request):
+    """View for home page."""
     entries = DBSession.query(Entry).order_by(desc(Entry.created))
     return {'entries': entries, 'title': "Kyle's Learning Journal"}
 
@@ -28,6 +40,7 @@ def list_view(request):
 @view_config(route_name='detail', renderer='templates/detail_template.jinja2',
              permission='read')
 def detail_view(request):
+    """View for single entry."""
     id = request.matchdict['id']
     entry = DBSession.query(Entry).filter(
         Entry.id == id).first()
@@ -39,6 +52,7 @@ def detail_view(request):
              renderer='templates/add_entry_template.jinja2',
              permission='create')
 def add_entry_view(request):
+    """View for adding entry page."""
     entry_form = EntryForm(request.POST)
     if request.method == 'POST' and entry_form.validate():
         new_entry = Entry(title=entry_form.title.data,
@@ -52,6 +66,7 @@ def add_entry_view(request):
              renderer='templates/edit_entry_template.jinja2',
              permission='edit')
 def edit_entry_view(request):
+    """View for page editing an entry"""
     id = request.matchdict['id']
     current_entry = DBSession.query(Entry).filter(Entry.id == id).first()
     edited_form = EntryForm(request.POST, current_entry)
@@ -65,6 +80,7 @@ def edit_entry_view(request):
 @view_config(route_name='login', renderer='templates/login_template.jinja2',
              permission='read')
 def login_view(request):
+    """View for login page."""
     return {}
 
 

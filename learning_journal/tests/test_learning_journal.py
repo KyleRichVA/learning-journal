@@ -1,4 +1,5 @@
 from learning_journal.models import Entry
+from learning_journal.views import good_login
 
 
 def test_entry_creation(session):
@@ -7,6 +8,10 @@ def test_entry_creation(session):
     session.flush()
     assert session.query(Entry).filter(Entry.title==u"Test Entry")
 
+
+def test_good_login(auth_req):
+    auth_req.params = {'username': 'owner', 'password': 'sounders'}
+    assert good_login(auth_req)
 
 def test_list_view(app, one_entry):
     response = app.get('/')

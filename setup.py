@@ -20,6 +20,7 @@ requires = [
     'psycopg2',
     'WTForms',
     'markdown',
+    'passlib',
     ]
 test_requires = ['pytest', 'pytest-watch', 'tox', 'webtest']
 dev_requires = ['ipython', 'pyramid-ipython']
