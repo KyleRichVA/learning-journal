@@ -66,6 +66,22 @@ def test_edit_entry_view(app, session):
     assert session.query(Entry).filter(Entry.title == u"New Title")
 
 
+def test_login_view_good(app, session):
+    app.get('/login')
+    response = app.post('/login',
+                        {'username': u'owner', 'password': u'sounders'})
+    # redirect to home
+    assert response.status_code == 302
+
+
+def test_login_view_bad(app, session):
+    app.get('/login')
+    response = app.post('/login',
+                        {'username': u'owner', 'password': u'seahawks'})
+    # returns the same page with error text.
+    assert u"Bad Login" in response.text
+
+
 def test_logout_view(app, session):
     # Login and log out and check if you can visit a protected page.
     login("owner", "sounders", app)
