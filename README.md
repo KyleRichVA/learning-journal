@@ -3,6 +3,8 @@
 Pyramid implemtation of a learning journal website.
 Created by Kyle Richardson Joe Mcclenahan
 
+### 3/21
+Adding and editing entries now require a sign in. Server now handles authorN and authorZ. New links to log in/log out depending on user.
 ### 3/18
 All views of the journal are set and interact with database correctly. Issues with creating entry of same names.
 Helpful dealing with printing markdown correctly.
