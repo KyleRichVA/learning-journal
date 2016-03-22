@@ -13,6 +13,16 @@ def test_good_login(auth_req):
     auth_req.params = {'username': 'owner', 'password': 'sounders'}
     assert good_login(auth_req)
 
+
+def test_bad_login_pw(auth_req):
+    auth_req.params = {'username': 'owner', 'password': 'seahawks'}
+    assert not good_login(auth_req)
+
+
+def test_bad_login_un(auth_req):
+    auth_req.params = {'username': 'someone', 'password': 'sounders'}
+    assert not good_login(auth_req)
+
 def test_list_view(app, one_entry):
     response = app.get('/')
     assert response.status_code == 200
