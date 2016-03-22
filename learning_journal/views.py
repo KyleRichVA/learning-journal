@@ -38,13 +38,9 @@ def detail_view(request):
 def add_entry_view(request):
     entry_form = EntryForm(request.POST)
     if request.method == 'POST' and entry_form.validate():
-        try:
-            new_entry = Entry(title=entry_form.title.data,
-                              text=entry_form.text.data)
-            DBSession.add(new_entry)
-        except SQLAlchemyError:
-            return {'title': 'Add Entry', 'form': entry_form,
-                    'error': 'Title Already Used'}
+        new_entry = Entry(title=entry_form.title.data,
+                          text=entry_form.text.data)
+        DBSession.add(new_entry)
         return HTTPFound(location='/')
     return {'title': 'Add Entry', 'form': entry_form}
 
@@ -60,15 +56,6 @@ def edit_entry_view(request):
         current_entry.text = edited_form.text.data
         return HTTPFound(location='/entry/{id}'.format(id=id))
     return {'title': 'Add Entry', 'form': edited_form}
-
-
-# @view_config(route_name='home', renderer='templates/mytemplate.pt')
-# def my_view(request):
-#     try:
-#         one = DBSession.query(Entry).filter(Entry.name == 'one').first()
-#     except DBAPIError:
-#         return Response(conn_err_msg, content_type='text/plain', status_int=500)
-#     return {'one': one, 'project': 'learning-journal'}
 
 
 conn_err_msg = """\
