@@ -16,6 +16,7 @@ from .models import (
 from wtforms import Form, StringField, TextAreaField, validators
 
 class EntryForm(Form):
+    """WTForm for adding or editing entries."""
     title = StringField(u'Title', [validators.required(),
                         validators.length(max=128)])
     text = TextAreaField(u'Entry', [validators.required()])
