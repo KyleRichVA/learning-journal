@@ -24,8 +24,8 @@ class EntryForm(Form):
 
 def good_login(request):
     """Return true if the request is a valid login."""
-    username = request.params['username']
-    password = request.params['password']
+    username = request.params.get('username')
+    password = request.params.get('password')
     settings = request.registry.settings
     if not (username and password):  # UN or PW is missing
         return False
