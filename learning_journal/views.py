@@ -85,11 +85,13 @@ def edit_entry_view(request):
              permission='read')
 def login_view(request):
     """View for login page."""
+    error = ''
     if request.method == 'POST':
         if good_login(request):
             headers = remember(request, request.params['username'])
             return HTTPFound(request.route_url('list'), headers=headers)
-    return {}
+        error = 'Bad Login'
+    return {'error': error}
 
 
 @view_config(route_name='logout')
