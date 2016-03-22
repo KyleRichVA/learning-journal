@@ -16,6 +16,13 @@
                 <ul class="nav navbar-nav">
                     <li><a href="{{ request.route_url("add_entry") }}">Add Entry</a></li>
                 </ul>
+                <ul class="nav navbar-nav navbar-right">
+                {% if request.authenticated_userid %}
+                    <li><a href="{{ request.route_url("logout") }}">Log Out</a></li>
+                {% else %}
+                    <li><a href="{{ request.route_url("login") }}">Log In</a></li>
+                {% endif %}
+                </ul>
             </div>
         </nav>
     </div>
