@@ -34,7 +34,8 @@ def detail_view(request):
 
 
 @view_config(route_name='add_entry',
-             renderer='templates/add_entry_template.jinja2')
+             renderer='templates/add_entry_template.jinja2',
+             permission='create')
 def add_entry_view(request):
     entry_form = EntryForm(request.POST)
     if request.method == 'POST' and entry_form.validate():
@@ -46,7 +47,8 @@ def add_entry_view(request):
 
 
 @view_config(route_name='edit_entry',
-             renderer='templates/edit_entry_template.jinja2')
+             renderer='templates/edit_entry_template.jinja2',
+             permission='edit')
 def edit_entry_view(request):
     id = request.matchdict['id']
     current_entry = DBSession.query(Entry).filter(Entry.id == id).first()
