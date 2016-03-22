@@ -1,7 +1,10 @@
 from pyramid.response import Response
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
-
+from pyramid.security import (
+    remember,
+    forget,
+    )
 from sqlalchemy.exc import DBAPIError, SQLAlchemyError
 from sqlalchemy import desc
 from passlib.hash import sha256_crypt
@@ -23,10 +26,11 @@ def good_login(request):
     username = request.params['username']
     password = request.params['password']
     settings = request.registry.settings
-    if not (username and password):  # UN or PW is mising
+    if not (username and password):  # UN or PW is missing
         return False
     if username == settings.get('auth.username'):
         return sha256_crypt.verify(password, settings.get('auth.password'))
+    return False
 
 
 @view_config(route_name='list', renderer='templates/list_template.jinja2',
@@ -58,7 +62,7 @@ def add_entry_view(request):
         new_entry = Entry(title=entry_form.title.data,
                           text=entry_form.text.data)
         DBSession.add(new_entry)
-        return HTTPFound(location='/')
+        return HTTPFound(request.route_url('list'))
     return {'title': 'Add Entry', 'form': entry_form}
 
 
@@ -73,7 +77,7 @@ def edit_entry_view(request):
     if request.method == 'POST' and edited_form.validate():
         current_entry.title = edited_form.title.data
         current_entry.text = edited_form.text.data
-        return HTTPFound(location='/entry/{id}'.format(id=id))
+        return HTTPFound(request.route_url("detail", id=current_entry.id))
     return {'title': 'Add Entry', 'form': edited_form}
 
 
@@ -81,7 +85,10 @@ def edit_entry_view(request):
              permission='read')
 def login_view(request):
     """View for login page."""
-    return {}
+    if request.method == 'POST':
+        if good_login(request):
+            headers = remember(request, request.params['username'])
+            return HTTPFound(request.route_url('list'), headers=headers)
 
 
 
