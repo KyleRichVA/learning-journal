@@ -74,6 +74,12 @@ def test_login_view_good(app, session):
     assert response.status_code == 302
 
 
+def test_login_view_good_authN(app, session):
+    app.get('/login')
+    app.post('/login', {'username': u'owner', 'password': u'sounders'})
+    assert u'Log Out' in app.get('/').text
+
+
 def test_login_view_bad(app, session):
     app.get('/login')
     response = app.post('/login',
