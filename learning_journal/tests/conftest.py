@@ -3,6 +3,8 @@ import pytest
 from learning_journal.models import DBSession, Base, Entry
 from sqlalchemy import create_engine
 import transaction
+from passlib.hash import sha256_crypt
+from pyramid import testing
 
 
 TEST_DATABASE_URL = 'postgres://macuser:@localhost:5432/testdb'
@@ -57,3 +59,18 @@ def app(dbtransaction):
     fake_settings = {'sqlalchemy.url': TEST_DATABASE_URL}
     app = main({}, **fake_settings)
     return TestApp(app)
+
+@pytest.fixture()
+def auth_req(request):
+    settings = {
+        'auth.username': 'owner',
+        'auth.password': sha256_crypt.encrypt('sounders')
+    }
+    testing.setUp(settings=settings)
+    req = testing.DummyRequest()
+
+    def cleanup():
+        testing.tearDown()
+
+    request.addfinalizer(cleanup)
+    return req

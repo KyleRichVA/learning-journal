@@ -16,11 +16,25 @@ from sqlalchemy.orm import (
 
 from zope.sqlalchemy import ZopeTransactionExtension
 
+from pyramid.security import (
+    Allow,
+    Everyone,
+    )
+
 import datetime
 import markdown
 
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 Base = declarative_base()
+
+
+class RootFactory(object):
+    __acl__ = [(Allow, Everyone, 'read'),
+               (Allow, 'owner', 'edit'),
+               (Allow, 'owner', 'create')]
+
+    def __init__(self, request):
+        self.request = request
 
 
 class Entry(Base):
