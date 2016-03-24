@@ -49,8 +49,10 @@ def test_entry_view(app, session):
 def test_add_entry_view(app, session):
     login(environ['ADMIN_UN'], environ['PW_PLAIN'], app)
     url = '/entry/add'
-    app.get(url)
-    app.post(url, {'title': 'Add Test', 'text': 'new text'})
+    response = app.get(url)
+    app.post(url, {'title': 'Add Test', 'text': 'new text',
+                   'csrf_token': response.session.get_csrf_token()})
+    # TODO: This requires html parsing shenagians deal with later.
     session.flush()
     assert session.query(Entry).filter(Entry.title == u"Add Test")
 
@@ -63,7 +65,9 @@ def test_edit_entry_view(app, session):
     starting_page = response.text
     assert one_entry.title in starting_page
     assert one_entry.text in starting_page
-    app.post(url, {'title': u"New Title", 'text': u'new text'})
+    app.post(url, {'title': u"New Title", 'text': u'new text',
+                   'csrf_token': response.session.get_csrf_token()})
+    # TODO: This requires html parsing shenagians deal with later.
     assert session.query(Entry).filter(Entry.title == u"New Title")
 
 
