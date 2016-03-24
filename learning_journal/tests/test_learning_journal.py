@@ -47,7 +47,7 @@ def test_entry_view(app, session):
 
 
 def test_add_entry_view(app, session):
-    login(environ['ADMIN_UN'], environ['ADMIN_PW'], app)
+    login(environ['ADMIN_UN'], environ['PW_PLAIN'], app)
     url = '/entry/add'
     app.get(url)
     app.post(url, {'title': 'Add Test', 'text': 'new text'})
