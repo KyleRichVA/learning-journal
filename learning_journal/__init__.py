@@ -3,6 +3,7 @@ from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.session import SignedCookieSessionFactory
 from passlib.hash import sha256_crypt
+import os.environ
 
 from sqlalchemy import engine_from_config
 
@@ -19,12 +20,12 @@ def main(global_config, **settings):
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
     Base.metadata.bind = engine
-    settings['auth.username'] = 'owner'
-    settings['auth.password'] = sha256_crypt.encrypt('sounders')
-    authn_policy = AuthTktAuthenticationPolicy('superseekret',
+    settings['auth.username'] = os.environ['ADMIN_UN']
+    settings['auth.password'] = os.environ['ADMIN_PW']
+    authn_policy = AuthTktAuthenticationPolicy(os.environ['AUTH_TKT_KEY'],
                                                hashalg='sha512')
     authz_policy = ACLAuthorizationPolicy()
-    cookie_factory = SignedCookieSessionFactory('donttellanyone')
+    cookie_factory = SignedCookieSessionFactory(os.environ['COOKIE_KEY'])
     config = Configurator(settings=settings,
                           authentication_policy=authn_policy,
                           authorization_policy=authz_policy,
