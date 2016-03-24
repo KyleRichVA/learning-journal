@@ -1,5 +1,6 @@
 from learning_journal.models import Entry
 from learning_journal.views import good_login
+from os import environ
 
 
 def login(username, password, app):
@@ -46,7 +47,7 @@ def test_entry_view(app, session):
 
 
 def test_add_entry_view(app, session):
-    login("owner", "sounders", app)
+    login(environ['ADMIN_UN'], environ['ADMIN_PW'], app)
     url = '/entry/add'
     app.get(url)
     app.post(url, {'title': 'Add Test', 'text': 'new text'})

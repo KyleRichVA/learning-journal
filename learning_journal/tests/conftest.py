@@ -5,6 +5,7 @@ from sqlalchemy import create_engine
 import transaction
 from passlib.hash import sha256_crypt
 from pyramid import testing
+from os import environ
 
 
 TEST_DATABASE_URL = 'postgres://macuser:@localhost:5432/testdb'
@@ -54,7 +55,6 @@ def session(dbtransaction):
 @pytest.fixture()
 def app(dbtransaction):
     from learning_journal import main
-    from pyramid.paster import get_appsettings
     from webtest import TestApp
     fake_settings = {'sqlalchemy.url': TEST_DATABASE_URL}
     app = main({}, **fake_settings)

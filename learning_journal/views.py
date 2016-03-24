@@ -1,6 +1,7 @@
 from pyramid.response import Response
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
+from pyramid.session import check_csrf_token
 from pyramid.security import (
     remember,
     forget,
@@ -60,6 +61,7 @@ def add_entry_view(request):
     """View for adding entry page."""
     entry_form = EntryForm(request.POST)
     if request.method == 'POST' and entry_form.validate():
+        check_csrf_token(request)
         if DBSession.query(Entry).filter(
                 Entry.title == entry_form.title.data):
             return {'title': 'Add Entry', 'form': entry_form,
@@ -80,6 +82,7 @@ def edit_entry_view(request):
     current_entry = DBSession.query(Entry).filter(Entry.id == id).first()
     edited_form = EntryForm(request.POST, current_entry)
     if request.method == 'POST' and edited_form.validate():
+        check_csrf_token(request)
         # If we try to edit the title to something already in DB
         if DBSession.query(Entry).filter(
                 Entry.title == edited_form.title.data):
