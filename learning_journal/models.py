@@ -23,6 +23,7 @@ from pyramid.security import (
 
 import datetime
 import markdown
+from os import environ
 
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 Base = declarative_base()
@@ -30,8 +31,8 @@ Base = declarative_base()
 
 class RootFactory(object):
     __acl__ = [(Allow, Everyone, 'read'),
-               (Allow, 'owner', 'edit'),
-               (Allow, 'owner', 'create')]
+               (Allow, environ['ADMIN_UN'], 'edit'),
+               (Allow, environ['ADMIN_UN'], 'create')]
 
     def __init__(self, request):
         self.request = request
