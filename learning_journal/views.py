@@ -85,8 +85,9 @@ def edit_entry_view(request):
     if request.method == 'POST' and edited_form.validate():
         check_csrf_token(request)
         # If we try to edit the title to something already in DB
-        if DBSession.query(Entry).filter(
-                Entry.title == edited_form.title.data).all():
+        if (DBSession.query(Entry).filter(
+                Entry.title == edited_form.title.data).all() and
+                current_entry.title != edited_form.title.data):
             return {'title': 'Add Entry', 'form': edited_form,
                     'error': 'Title Already Used'}
         current_entry.title = edited_form.title.data
