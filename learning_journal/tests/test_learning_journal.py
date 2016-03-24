@@ -56,7 +56,7 @@ def test_add_entry_view(app, session):
 
 
 def test_edit_entry_view(app, session):
-    login("owner", "sounders", app)
+    login(environ['ADMIN_UN'], environ['PW_PLAIN'], app)
     one_entry = session.query(Entry).filter(Entry.title == u"Test Entry").first()
     url = '/entry/{id}/edit'.format(id=one_entry.id)
     response = app.get(url)
@@ -70,27 +70,29 @@ def test_edit_entry_view(app, session):
 def test_login_view_good(app, session):
     app.get('/login')
     response = app.post('/login',
-                        {'username': u'owner', 'password': u'sounders'})
+                        {'username': environ['ADMIN_UN'],
+                         'password': environ['PW_PLAIN']})
     # redirect to home
     assert response.status_code == 302
 
 
 def test_login_view_good_authN(app, session):
     app.get('/login')
-    app.post('/login', {'username': u'owner', 'password': u'sounders'})
+    app.post('/login', {'username': environ['ADMIN_UN'],
+                        'password': environ['PW_PLAIN']})
     assert u'Log Out' in app.get('/').text
 
 
 def test_login_view_bad(app, session):
     app.get('/login')
     response = app.post('/login',
-                        {'username': u'owner', 'password': u'seahawks'})
+                        {'username': 'blech', 'password': 'huh?'})
     # returns the same page with error text.
     assert u"Bad Login" in response.text
 
 
 def test_logout_view(app, session):
     # Login and log out and check if you can visit a protected page.
-    login("owner", "sounders", app)
+    login(environ['ADMIN_UN'], environ['PW_PLAIN'], app)
     app.get('/logout')
     assert u'Log In' in app.get('/').text
