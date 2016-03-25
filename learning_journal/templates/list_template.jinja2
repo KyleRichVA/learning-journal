@@ -3,7 +3,9 @@
 <div class="posts container">
     <ul>
     {% for entry in entries %}
-        <li><a href="{{ request.route_url("detail", id = entry.id) }}">{{ entry.title }}</a>-date</li>
+        <li>
+        <a href="{{ request.route_url("detail", id = entry.id) }}">{{ entry.title }}</a>-{{ entry.created.date() }}
+        </li>
     {% endfor %}
     </ul>
 </div>
