@@ -8,7 +8,7 @@ from pyramid import testing
 from os import environ
 
 
-TEST_DATABASE_URL = 'postgres://macuser:@localhost:5432/testdb'
+TEST_DATABASE_URL = environ['TEST_DB_URL']
 
 
 @pytest.fixture(scope='session')
