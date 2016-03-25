@@ -10,7 +10,7 @@ with open(os.path.join(here, 'CHANGES.txt')) as f:
 
 requires = [
     'pyramid',
-    'pyramid_chameleon',
+    'pyramid_jinja2',
     'pyramid_debugtoolbar',
     'pyramid_tm',
     'SQLAlchemy',
@@ -18,8 +18,11 @@ requires = [
     'zope.sqlalchemy',
     'waitress',
     'psycopg2',
+    'WTForms',
+    'markdown',
+    'passlib',
     ]
-test_requires = ['pytest', 'pytest-watch', 'tox']
+test_requires = ['pytest', 'pytest-watch', 'tox', 'webtest']
 dev_requires = ['ipython', 'pyramid-ipython']
 
 setup(name='learning-journal',
