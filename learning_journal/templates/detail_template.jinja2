@@ -3,7 +3,7 @@
     <div class="entry container">
         <h1>{{ entry.title }}</h1>
         <h3>{{ entry.created.date() }}</h3>
-        <div class="well">{{ entry_text|safe }}</div>
+        <div class="well" style="font-size:140%">{{ entry_text|safe }}</div>
         {% if request.authenticated_userid %}
         <a href="{{ request.route_url("edit_entry", id = entry.id) }}" class="btn btn-default" role="button">Edit Entry</a>
         {% endif %}
