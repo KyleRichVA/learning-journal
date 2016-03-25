@@ -1,6 +1,7 @@
 from learning_journal.models import Entry
 from learning_journal.views import good_login
 from os import environ
+from bs4 import BeautifulSoup
 
 
 def login(username, password, app):
@@ -10,10 +11,10 @@ def login(username, password, app):
 
 
 def test_entry_creation(session):
-    test_entry = Entry(title=u"Test Entry", text=u"Here is my test entry")
+    test_entry = Entry(title=u"Test", text=u"Here is my test entry")
     session.add(test_entry)
     session.flush()
-    assert session.query(Entry).filter(Entry.title == u"Test Entry")
+    assert session.query(Entry).filter(Entry.title == u"Test")
 
 
 def test_good_login(auth_req):
@@ -31,10 +32,13 @@ def test_bad_login_un(auth_req):
     assert not good_login(auth_req)
 
 
-def test_list_view(app, one_entry):
+def test_list_view(app, session):
+    test_entry = Entry(title=u"Test", text=u"Here is my test entry")
+    session.add(test_entry)
+    session.flush()
     response = app.get('/')
     actual = response.text
-    assert one_entry.title in actual
+    assert test_entry.title in actual
 
 
 def test_entry_view(app, session):
@@ -50,8 +54,10 @@ def test_add_entry_view(app, session):
     login(environ['ADMIN_UN'], environ['PW_PLAIN'], app)
     url = '/entry/add'
     response = app.get(url)
+    soup = BeautifulSoup(response.html, 'html.parser')
+    token = soup.find("input", name="csrf_token").find("value")
     app.post(url, {'title': 'Add Test', 'text': 'new text',
-                   'csrf_token': response.session.get_csrf_token()})
+                   'csrf_token': token})
     # TODO: This requires html parsing shenagians deal with later.
     session.flush()
     assert session.query(Entry).filter(Entry.title == u"Add Test")

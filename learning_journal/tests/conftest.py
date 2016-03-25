@@ -38,13 +38,6 @@ def dbtransaction(request, sqlengine):
 
     return connection
 
-@pytest.fixture()
-def one_entry(session):
-    test_entry = Entry(title=u"Test Entry", text=u"Here is my test entry")
-    with transaction.manager:
-        session.add(test_entry)
-    return session.query(Entry).filter(Entry.title==u"Test Entry").first()
-
 
 @pytest.fixture()
 def session(dbtransaction):
